@@ -140,14 +140,16 @@ be recorded in only one of the two requirements.
 
 When Specman writes a header, it writes the keys in the order listed above
 (C<id>, C<title>, C<status>, C<priority>, C<author>, C<created>, C<tags>,
-C<refines>, C<depends_on>, C<conflicts_with>) and leaves out optional keys
-that have no value, so that changes produce small, readable diffs.
+C<refines>, C<depends_on>, C<conflicts_with>), leaves out optional keys that
+have no value, and quotes values only where YAML requires it, so that changes
+produce small, readable diffs.
 
 =head1 BODY
 
 Everything after the closing C<---> line is the requirement's description,
 written in CommonMark Markdown. The body may be empty while a requirement is a
-draft. The title is not repeated as a heading in the body.
+draft; a requirement with any other status must have a body. The title is not
+repeated as a heading in the body.
 
 =head1 SEE ALSO
 

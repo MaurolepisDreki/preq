@@ -19,5 +19,28 @@ WriteMakefile(
 	PREREQ_PM => {
 		'YAML::PP' => '0',
 	},
+	META_MERGE => {
+		'meta-spec' => { version => 2 },
+		prereqs     => {
+			develop => {
+				requires => {
+					'Pod::Markdown' => '3.400',
+				},
+			},
+		},
+	},
 	test => { TESTS => 't/*.t' },
 );
+
+package MY;
+
+# `make docs` regenerates the Markdown documentation in doc/ from its POD
+# source; see tools/pod2doc.
+sub postamble {
+	return <<'END';
+.PHONY : docs
+
+docs :
+	$(PERL) tools/pod2doc
+END
+}

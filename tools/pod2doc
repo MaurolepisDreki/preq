@@ -1,0 +1,103 @@
+#!/usr/bin/perl
+use v5.36;
+
+# Generates the Markdown documentation in doc/ from its POD source.
+#
+#	tools/pod2doc            regenerates every document
+#	tools/pod2doc FILE...    regenerates the given documents
+#	tools/pod2doc --check    reports documents that are out of date
+#
+# Run from the top of the source tree, usually as `make docs`.
+
+package Specman::Tools::Markdown {
+	use parent 'Pod::Markdown';
+
+	# Links to other documents generated here point to their Markdown file,
+	# links to Specman's own modules to their source, and other links to
+	# MetaCPAN as usual.
+	sub format_perldoc_url($self, $name, $section) {
+		return $self->SUPER::format_perldoc_url($name, $section)
+			unless defined $name;
+
+		my %target = reverse %main::DOCS;
+		for my $source (keys %target) {
+			return main::relative($target{$source}) if main::pod_name($source) eq $name;
+		}
+		if ($name =~ /\ASpecman(?:::|\z)/) {
+			(my $path = "lib/$name.pm") =~ s{::}{/}g;
+			return main::relative($path);
+		}
+		return $self->SUPER::format_perldoc_url($name, $section);
+	}
+}
+
+package main;
+
+use Pod::Markdown;
+
+our %DOCS = (
+	'doc/commands.md' => 'bin/specman',
+	'doc/format.md'   => 'lib/Specman/Manual/Format.pod',
+);
+
+# The name a POD document is linked by: the command or module name.
+sub pod_name($source) {
+	return $1 if $source =~ m{\Abin/(.+)\z};
+	(my $name = $source) =~ s{\Alib/|\.p(?:m|od)\z}{}g;
+	return $name =~ s{/}{::}gr;
+}
+
+# A path from the top of the source tree, relative to doc/.
+sub relative($path) {
+	return $path =~ s{\Adoc/}{}r if $path =~ m{\Adoc/};
+	return "../$path";
+}
+
+sub generate($target) {
+	my $source = $DOCS{$target};
+	my $parser = Specman::Tools::Markdown->new(output_encoding => 'UTF-8');
+	$parser->output_string(\my $markdown);
+
+	# Verbatim blocks are copied as they are. Keep their tab indentation,
+	# which is exactly one level of Markdown code block.
+	$parser->expand_verbatim_tabs(0);
+	$parser->parse_file($source);
+
+	# Indent with tabs, as the rest of the project does.
+	$markdown =~ s/^((?: {4})+)/"\t" x (length($1) \/ 4)/gme;
+
+	return "<!-- Generated from $source by tools/pod2doc: edit the source and run `make docs`. -->\n\n"
+		. $markdown;
+}
+
+sub read_file($path) {
+	open my $fh, '<:raw', $path or return undef;
+	local $/;
+	return <$fh>;
+}
+
+my $check = @ARGV && $ARGV[0] eq '--check' ? shift @ARGV : undef;
+my @targets = @ARGV ? @ARGV : sort keys %DOCS;
+for my $target (@targets) {
+	die "pod2doc: unknown document '$target'\n" unless $DOCS{$target};
+}
+
+my $stale = 0;
+for my $target (@targets) {
+	my $markdown = generate($target);
+	my $current = read_file($target);
+	next if defined $current && $current eq $markdown;
+
+	if ($check) {
+		say "$target is out of date with $DOCS{$target}; run `make docs`";
+		$stale++;
+		next;
+	}
+
+	open my $fh, '>:raw', $target or die "pod2doc: cannot write $target: $!\n";
+	print $fh $markdown;
+	close $fh or die "pod2doc: cannot write $target: $!\n";
+	say "pod2doc: wrote $target";
+}
+
+exit($stale ? 1 : 0);
