@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+use v5.36;
+
+use Specman::CLI;
+
+exit Specman::CLI->new(pod => __FILE__)->run(@ARGV);
+
+=head1 NAME
+
+specman - Manage project requirements
+
+=head1 SYNOPSIS
+
+	specman [--dir DIR] list [--status STATUS] [--tag TAG] [--json]
+	specman [--dir DIR] show ID [--json]
+	specman [--dir DIR] validate [--json]
+	specman --help | --version
+
+=head1 DESCRIPTION
+
+B<specman> works with a project's requirements, stored as one file per
+requirement in a directory, in the format described in
+L<Specman::Manual::Format>.
+
+Text output is meant for people. For use by other tools, every command
+accepts B<--json>, which prints a single line of JSON instead.
+
+=head1 COMMANDS
+
+=over
+
+=item B<list>
+
+Lists the requirements, one per line, with their identifier, status,
+priority and title.
+
+With B<--json>, prints an array of objects, one per requirement, holding
+every field except C<body>, and C<file>, the requirement's file name.
+
+=item B<show> I<ID>
+
+Shows one requirement: its fields, the requirements related to it (as
+I<refined by>, I<needed by> and I<conflicts with>), and its body.
+
+With B<--json>, prints an object holding every field, C<file>, and
+C<incoming>: for each relation type, the identifiers of the requirements
+with that relation to this one.
+
+=item B<validate>
+
+Checks every requirement and the relations between them, and prints each
+problem found, one per line, as in C<REQ-002.md: tags: item 2: is empty>.
+Warnings are prefixed with C<warning:>; they are worth attention, but do not
+make the requirements invalid. A summary is printed to standard error.
+
+With B<--json>, prints an object holding C<valid>, true or false, and
+C<errors>, an array of objects, one per problem, holding C<message>,
+C<severity> (C<error> or C<warning>), C<text> (the problem as printed
+without B<--json>), and those of C<file>, C<id>, C<field> and C<item> that
+locate it.
+
+=back
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--dir> I<DIR>
+
+The directory holding the requirement files. Defaults to F<requirements> in
+the current directory.
+
+=item B<--status> I<STATUS>
+
+With B<list>, lists only requirements with the given status.
+
+=item B<--tag> I<TAG>
+
+With B<list>, lists only requirements with the given tag.
+
+=item B<--json>
+
+Prints JSON instead of text.
+
+=item B<-h>, B<--help>
+
+Prints this help and exits.
+
+=item B<-V>, B<--version>
+
+Prints the version and exits.
+
+=back
+
+=head1 EXIT STATUS
+
+=over
+
+=item B<0>
+
+Success. For B<validate>: no errors were found.
+
+=item B<1>
+
+For B<validate>: errors were found; warnings alone do not count. For B<show>: no requirement has the
+given identifier.
+
+=item B<2>
+
+The command line or the requirements directory is invalid.
+
+=back
+
+=head1 SEE ALSO
+
+L<Specman>, L<Specman::Manual::Format>
+
+=head1 AUTHOR
+
+Maurolepis Dreki E<lt>inventerna@gmail.comE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2026 Maurolepis Dreki.
+
+=cut

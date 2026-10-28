@@ -1,0 +1,164 @@
+=head1 NAME
+
+Specman::Manual::Format - The Specman requirement file format
+
+=head1 DESCRIPTION
+
+Specman stores each requirement as one text file. The files live in a
+directory named F<requirements/> at the root of the project they describe,
+and are kept under version control with git.
+
+A requirement file consists of a metadata header written in YAML, followed by
+a body written in Markdown:
+
+	---
+	id: REQ-002
+	title: Store requirements as text files
+	status: approved
+	priority: high
+	author: Maurolepis Dreki
+	created: 2026-10-27
+	tags: [storage]
+	refines: [REQ-001]
+	---
+	Each requirement shall be stored as one text file, kept under
+	version control with git.
+
+=head1 FILES
+
+=over
+
+=item *
+
+Files are named after the requirement's C<id> with the extension F<.md>, for
+example F<requirements/REQ-002.md>. The file name must match the C<id> in the
+header.
+
+=item *
+
+Files are encoded in UTF-8 and use LF line endings.
+
+=back
+
+=head1 HEADER
+
+The file must begin with a line containing exactly C<--->. The header ends at
+the next line containing exactly C<--->. Everything between the two lines is a
+YAML mapping, read with the YAML 1.2 core schema; in particular, dates and
+words such as C<yes> or C<no> are read as plain strings.
+
+Values containing a colon followed by a space, or beginning with a YAML
+special character, must be quoted:
+
+	title: "Search: by tag and by text"
+
+The set of keys is fixed. A header containing any key not listed below is
+invalid.
+
+=head2 Fields
+
+=over
+
+=item C<id> (required)
+
+The requirement's identifier: C<REQ-> followed by three or more digits, for
+example C<REQ-001>. Identifiers are unique within a project and never reused.
+
+=item C<title> (required)
+
+A short, single-line summary.
+
+=item C<status> (required)
+
+One of:
+
+=over
+
+=item C<draft>
+
+Proposed, not yet agreed.
+
+=item C<approved>
+
+Agreed, not yet implemented.
+
+=item C<implemented>
+
+Implemented.
+
+=item C<obsolete>
+
+No longer applies. Obsolete requirements are kept, not deleted, so their
+identifiers are never reused.
+
+=back
+
+=item C<priority> (optional)
+
+One of C<low>, C<medium> or C<high>.
+
+=item C<author> (optional)
+
+The name of the requirement's author.
+
+=item C<created> (required)
+
+The date the requirement was created, in the form C<YYYY-MM-DD>.
+
+=item C<tags> (optional)
+
+A list of short, lowercase words used for grouping and searching.
+
+=back
+
+=head2 Relations
+
+Relations are lists of requirement identifiers. Each relation is recorded only
+in the requirement it starts from; the reverse direction (for example, which
+requirements refine C<REQ-001>) is derived by Specman. Every identifier listed
+must name an existing requirement.
+
+=over
+
+=item C<refines> (optional)
+
+The requirements this one is a more detailed part of. This forms the
+requirement hierarchy and must not contain cycles.
+
+=item C<depends_on> (optional)
+
+The requirements that must be satisfied before this one can be.
+
+=item C<conflicts_with> (optional)
+
+The requirements this one contradicts. The relation is symmetric: it needs to
+be recorded in only one of the two requirements.
+
+=back
+
+=head2 Writing order
+
+When Specman writes a header, it writes the keys in the order listed above
+(C<id>, C<title>, C<status>, C<priority>, C<author>, C<created>, C<tags>,
+C<refines>, C<depends_on>, C<conflicts_with>) and leaves out optional keys
+that have no value, so that changes produce small, readable diffs.
+
+=head1 BODY
+
+Everything after the closing C<---> line is the requirement's description,
+written in CommonMark Markdown. The body may be empty while a requirement is a
+draft. The title is not repeated as a heading in the body.
+
+=head1 SEE ALSO
+
+L<Specman>, L<Specman::Model::Field>
+
+=head1 AUTHOR
+
+Maurolepis Dreki E<lt>inventerna@gmail.comE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2026 Maurolepis Dreki.
+
+=cut
