@@ -45,3 +45,15 @@ The Perl modules are documented in POD; read them with `perldoc`, for example
 | `t/` | Tests |
 | `tools/` | Development tools, not installed |
 | `Makefile.PL` | Build, test and install |
+
+## Contributing
+
+Bug reports and suggestions are welcome. Code contributions are accepted only
+with copyright assigned to the author; see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Licence
+
+Copyright (C) 2026 Maurolepis Dreki.
+
+preq is free software, licensed under the Artistic License 2.0. See
+[LICENSE](LICENSE).

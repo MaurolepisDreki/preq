@@ -154,8 +154,12 @@ L<Preq::Model::Record>, L<Preq::Manual::Format>
 
 Maurolepis Dreki E<lt>inventerna@gmail.comE<gt>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2026 Maurolepis Dreki.
+
+This is free software, licensed under the Artistic License 2.0. See the
+F<LICENSE> file in the distribution, or
+L<https://opensource.org/license/artistic-2-0>.
 
 =cut

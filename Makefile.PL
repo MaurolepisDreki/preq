@@ -6,7 +6,7 @@ WriteMakefile(
 	AUTHOR           => 'Maurolepis Dreki <inventerna@gmail.com>',
 	VERSION_FROM     => 'lib/Preq.pm',
 	ABSTRACT_FROM    => 'lib/Preq.pm',
-	LICENSE          => 'unknown',
+	LICENSE          => 'artistic_2',
 	MIN_PERL_VERSION => '5.036',
 	EXE_FILES        => ['bin/preq'],
 	CONFIGURE_REQUIRES => {
