@@ -148,6 +148,10 @@ Each object holds:
 
 Maurolepis Dreki <inventerna@gmail.com>
 
-# COPYRIGHT
+# COPYRIGHT AND LICENSE
 
 Copyright (C) 2026 Maurolepis Dreki.
+
+This is free software, licensed under the Artistic License 2.0. See the
+`LICENSE` file in the distribution, or
+[https://opensource.org/license/artistic-2-0](https://opensource.org/license/artistic-2-0).
