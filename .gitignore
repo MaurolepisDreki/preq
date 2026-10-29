@@ -6,3 +6,5 @@
 /local/
 /Preq-*
 *.tar.gz
+/.claude/worktrees/
+/.claude/settings.local.json
