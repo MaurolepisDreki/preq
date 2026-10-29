@@ -1,21 +1,21 @@
-<!-- Generated from bin/specman by tools/pod2doc: edit the source and run `make docs`. -->
+<!-- Generated from bin/preq by tools/pod2doc: edit the source and run `make docs`. -->
 
 # NAME
 
-specman - Manage project requirements
+preq - Manage project requirements
 
 # SYNOPSIS
 
-	specman [--dir DIR] list [--status STATUS] [--tag TAG] [--json]
-	specman [--dir DIR] show ID [--json]
-	specman [--dir DIR] validate [--json]
-	specman --help | --version
+	preq [--dir DIR] list [--status STATUS] [--tag TAG] [--json]
+	preq [--dir DIR] show ID [--json]
+	preq [--dir DIR] validate [--json]
+	preq --help | --version
 
 # DESCRIPTION
 
-**specman** works with a project's requirements, stored as one file per
+**preq** works with a project's requirements, stored as one file per
 requirement in a directory, in the format described in
-[Specman::Manual::Format](format.md).
+[Preq::Manual::Format](format.md).
 
 Text output is meant for people. For use by other tools, every command
 accepts **--json**, which prints a single line of JSON instead.
@@ -63,7 +63,7 @@ problem found, one per line, as in `REQ-002.md: tags: item 2: is empty`.
 Warnings are prefixed with `warning:`; they are worth attention, but do not
 make the requirements invalid. A summary is printed to standard error:
 
-	specman: 8 requirements, 0 errors
+	preq: 8 requirements, 0 errors
 
 The checks cover:
 
@@ -142,7 +142,7 @@ Each object holds:
 
 # SEE ALSO
 
-[Specman](../lib/Specman.pm), [Specman::Manual::Format](format.md)
+[Preq](../lib/Preq.pm), [Preq::Manual::Format](format.md)
 
 # AUTHOR
 

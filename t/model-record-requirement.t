@@ -1,9 +1,9 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Record::Requirement;
+use Preq::Model::Record::Requirement;
 
 sub requirement(%values) {
-	my $req = Specman::Model::Record::Requirement->new;
+	my $req = Preq::Model::Record::Requirement->new;
 	$req->set_values({
 		id      => 'REQ-002',
 		title   => 'Store requirements as text files',
@@ -21,9 +21,9 @@ sub errors_for(%values) {
 	return [$req->errors];
 }
 
-is([Specman::Model::Record::Requirement->new->field_names],
+is([Preq::Model::Record::Requirement->new->field_names],
 	[qw(id title status priority author created tags refines depends_on conflicts_with body)],
-	'fields in the order of Specman::Manual::Format');
+	'fields in the order of Preq::Manual::Format');
 
 is(errors_for(), [], 'a complete requirement is valid');
 

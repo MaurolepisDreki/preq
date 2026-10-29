@@ -1,4 +1,4 @@
-package Specman::CLI 0.001;
+package Preq::CLI 0.001;
 
 use v5.36;
 
@@ -6,30 +6,30 @@ use Getopt::Long qw(GetOptionsFromArray);
 use JSON::PP;
 use Pod::Usage qw(pod2usage);
 
-use Specman;
-use Specman::Model::Field::Relation;
-use Specman::Repository;
+use Preq;
+use Preq::Model::Field::Relation;
+use Preq::Repository;
 
 =head1 NAME
 
-Specman::CLI - The specman command-line interface
+Preq::CLI - The preq command-line interface
 
 =head1 SYNOPSIS
 
-	use Specman::CLI;
+	use Preq::CLI;
 
-	exit Specman::CLI->new(pod => __FILE__)->run(@ARGV);
+	exit Preq::CLI->new(pod => __FILE__)->run(@ARGV);
 
 =head1 DESCRIPTION
 
-Implements the commands of L<specman>. The user documentation, including the
-commands, options and exit codes, is in L<specman>.
+Implements the commands of L<preq>. The user documentation, including the
+commands, options and exit codes, is in L<preq>.
 
 =head1 METHODS
 
 =head2 new
 
-	my $cli = Specman::CLI->new(
+	my $cli = Preq::CLI->new(
 		out => $fh,
 		err => $fh,
 		pod => $path,
@@ -80,7 +80,7 @@ sub run($self, @args) {
 	return $self->_usage(2) unless $parsed;
 	return $self->_usage(0, 99) if $opt{help};
 	if ($opt{version}) {
-		$self->_say("specman $Specman::VERSION");
+		$self->_say("preq $Preq::VERSION");
 		return 0;
 	}
 
@@ -88,7 +88,7 @@ sub run($self, @args) {
 	my $command = $COMMANDS{$name} // return $self->_error(2, "unknown command '$name'");
 
 	return $self->_error(2, "no requirements directory '$opt{dir}'") unless -d $opt{dir};
-	my $repo = Specman::Repository->new(dir => $opt{dir})->load;
+	my $repo = Preq::Repository->new(dir => $opt{dir})->load;
 
 	return $self->$command($repo, \%opt, @args);
 }
@@ -136,7 +136,7 @@ sub _show($self, $repo, $opt, @args) {
 		next if !defined $value || (ref $value eq 'ARRAY' && !@$value);
 		push @rows, [ "$name:", ref $value eq 'ARRAY' ? $self->_list_value($repo, $name, $value) : $value ];
 	}
-	for my $type (Specman::Model::Field::Relation->types) {
+	for my $type (Preq::Model::Field::Relation->types) {
 		my @from = map { $_->id } $repo->incoming($id, $type);
 		push @rows, [ _reverse_label($type) . ':', join(', ', @from) ] if @from;
 	}
@@ -183,7 +183,7 @@ sub _values($self, $repo, $record, $full) {
 		my $id = $record->id;
 		$values->{incoming} = {
 			map { $_ => [ map { $_->id } $repo->incoming($id, $_) ] }
-				Specman::Model::Field::Relation->types
+				Preq::Model::Field::Relation->types
 		};
 	}
 	return $values;
@@ -191,7 +191,7 @@ sub _values($self, $repo, $record, $full) {
 
 # A list field's values for text output; relations show their target's title.
 sub _list_value($self, $repo, $name, $values) {
-	my %relation = map { $_ => 1 } Specman::Model::Field::Relation->types;
+	my %relation = map { $_ => 1 } Preq::Model::Field::Relation->types;
 	return join ', ', map { $_ // '' } @$values unless $relation{$name};
 
 	return join ', ', map {
@@ -246,7 +246,7 @@ sub _usage($self, $status, $verbose = 0) {
 		);
 	}
 	else {
-		print $fh "Usage: specman [options] list|show ID|validate\n";
+		print $fh "Usage: preq [options] list|show ID|validate\n";
 	}
 	return $status;
 }
@@ -257,7 +257,7 @@ sub _error($self, $status, $message) {
 }
 
 sub _message($self, $message) {
-	print { $self->{err} } "specman: $message\n";
+	print { $self->{err} } "preq: $message\n";
 	return;
 }
 
@@ -275,7 +275,7 @@ sub _print($self, $text) {
 
 =head1 SEE ALSO
 
-L<specman>, L<Specman::Repository>
+L<preq>, L<Preq::Repository>
 
 =head1 AUTHOR
 

@@ -1,8 +1,8 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Field::Relation;
+use Preq::Model::Field::Relation;
 
-my $class = 'Specman::Model::Field::Relation';
+my $class = 'Preq::Model::Field::Relation';
 
 is([$class->types], [qw(conflicts_with depends_on refines)], 'types lists the relation types');
 like(dies { $class->new }, qr/^unknown relation type ''/, 'type is required');

@@ -1,8 +1,8 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Error;
+use Preq::Model::Error;
 
-my $class = 'Specman::Model::Error';
+my $class = 'Preq::Model::Error';
 
 like(dies { $class->new }, qr/^message is required/, 'message is required');
 like(dies { $class->new(message => 'x', severity => 'fatal') }, qr/^unknown severity 'fatal'/, 'severity is checked');

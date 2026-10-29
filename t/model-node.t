@@ -1,10 +1,10 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Node;
+use Preq::Model::Node;
 
 # A minimal concrete node: its errors are whatever was last set.
 package Test::Node {
-	use parent -norequire, 'Specman::Model::Node';
+	use parent -norequire, 'Preq::Model::Node';
 
 	sub set($self, @errors) {
 		$self->{value} = \@errors;
@@ -19,7 +19,7 @@ package Test::Node {
 
 # A parent whose errors are its own plus its child's.
 package Test::Parent {
-	use parent -norequire, 'Specman::Model::Node';
+	use parent -norequire, 'Preq::Model::Node';
 
 	sub _validate($self) {
 		my $child = $self->{child};
@@ -28,7 +28,7 @@ package Test::Parent {
 	}
 }
 
-like(dies { Specman::Model::Node->new->is_valid }, qr/^NotImplemented/, 'abstract node dies with NotImplemented');
+like(dies { Preq::Model::Node->new->is_valid }, qr/^NotImplemented/, 'abstract node dies with NotImplemented');
 
 subtest 'before validation' => sub {
 	my $node = Test::Node->new;
@@ -105,16 +105,16 @@ subtest 'error objects' => sub {
 	$node->set('plain');
 	$node->is_valid;
 	my ($error) = $node->errors;
-	isa_ok($error, 'Specman::Model::Error');
+	isa_ok($error, 'Preq::Model::Error');
 	is($error->message, 'plain', 'plain strings become errors');
 
-	my $warning = Specman::Model::Error->new(message => 'look', severity => 'warning');
+	my $warning = Preq::Model::Error->new(message => 'look', severity => 'warning');
 	$node->set($warning);
 	ok($node->is_valid, 'warnings alone do not make a node invalid');
 	is([$node->errors], [$warning], 'but are reported');
 
 	my $stamp = $node->errors_updated_at;
-	$node->set(Specman::Model::Error->new(message => 'look'));
+	$node->set(Preq::Model::Error->new(message => 'look'));
 	ok(!$node->is_valid, 'the same message as an error makes it invalid');
 	ok($node->errors_updated_at != $stamp, 'a change of severity is a change of the list');
 };

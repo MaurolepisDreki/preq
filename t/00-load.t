@@ -1,20 +1,20 @@
 use v5.36;
 use Test::More;
 
-use_ok('Specman');
-use_ok('Specman::Model::Error');
-use_ok('Specman::Model::Node');
-use_ok('Specman::Model::Field');
-use_ok('Specman::Model::Field::Text');
-use_ok('Specman::Model::Field::Id');
-use_ok('Specman::Model::Field::Enum');
-use_ok('Specman::Model::Field::Date');
-use_ok('Specman::Model::Field::Markdown');
-use_ok('Specman::Model::Field::Relation');
-use_ok('Specman::Model::Field::List');
-use_ok('Specman::Model::Record');
-use_ok('Specman::Model::Record::Requirement');
-use_ok('Specman::Repository');
-use_ok('Specman::CLI');
+use_ok('Preq');
+use_ok('Preq::Model::Error');
+use_ok('Preq::Model::Node');
+use_ok('Preq::Model::Field');
+use_ok('Preq::Model::Field::Text');
+use_ok('Preq::Model::Field::Id');
+use_ok('Preq::Model::Field::Enum');
+use_ok('Preq::Model::Field::Date');
+use_ok('Preq::Model::Field::Markdown');
+use_ok('Preq::Model::Field::Relation');
+use_ok('Preq::Model::Field::List');
+use_ok('Preq::Model::Record');
+use_ok('Preq::Model::Record::Requirement');
+use_ok('Preq::Repository');
+use_ok('Preq::CLI');
 
 done_testing;

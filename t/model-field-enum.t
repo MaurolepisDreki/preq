@@ -1,11 +1,11 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Field::Enum;
+use Preq::Model::Field::Enum;
 
-like(dies { Specman::Model::Field::Enum->new }, qr/^allowed must be/, 'allowed is required');
-like(dies { Specman::Model::Field::Enum->new(allowed => []) }, qr/^allowed must be/, 'allowed must not be empty');
+like(dies { Preq::Model::Field::Enum->new }, qr/^allowed must be/, 'allowed is required');
+like(dies { Preq::Model::Field::Enum->new(allowed => []) }, qr/^allowed must be/, 'allowed must not be empty');
 
-my $field = Specman::Model::Field::Enum->new(allowed => [qw(low medium high)]);
+my $field = Preq::Model::Field::Enum->new(allowed => [qw(low medium high)]);
 is([$field->allowed], [qw(low medium high)], 'allowed returns the values in order');
 
 $field->set('medium');

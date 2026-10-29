@@ -1,4 +1,4 @@
-package Specman::Model::Error 0.001;
+package Preq::Model::Error 0.001;
 
 use v5.36;
 
@@ -7,13 +7,13 @@ use overload '""' => sub ($self, @) { $self->as_string }, fallback => 1;
 
 =head1 NAME
 
-Specman::Model::Error - A problem found while validating a Specman model
+Preq::Model::Error - A problem found while validating a preq model
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Error;
+	use Preq::Model::Error;
 
-	my $error = Specman::Model::Error->new(
+	my $error = Preq::Model::Error->new(
 		field   => 'status',
 		message => "'done' is not one of draft, approved, implemented, obsolete",
 	);
@@ -80,7 +80,7 @@ my %SEVERITY = map { $_ => 1 } qw(error warning);
 
 =head2 new
 
-	my $error = Specman::Model::Error->new(
+	my $error = Preq::Model::Error->new(
 		message  => $text,
 		severity => 'error',
 		file     => $name,
@@ -234,7 +234,7 @@ sub TO_JSON($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Node>
+L<Preq::Model::Node>
 
 =head1 AUTHOR
 

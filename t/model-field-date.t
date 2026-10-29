@@ -1,9 +1,9 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Field::Date;
+use Preq::Model::Field::Date;
 
 sub errors_for($value) {
-	my $field = Specman::Model::Field::Date->new;
+	my $field = Preq::Model::Field::Date->new;
 	$field->set($value);
 	$field->is_valid;
 	return [$field->errors];

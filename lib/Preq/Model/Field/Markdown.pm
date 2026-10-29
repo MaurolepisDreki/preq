@@ -1,18 +1,18 @@
-package Specman::Model::Field::Markdown 0.001;
+package Preq::Model::Field::Markdown 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Field';
+use parent 'Preq::Model::Field';
 
 =head1 NAME
 
-Specman::Model::Field::Markdown - Markdown text field
+Preq::Model::Field::Markdown - Markdown text field
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Markdown;
+	use Preq::Model::Field::Markdown;
 
-	my $body = Specman::Model::Field::Markdown->new;
+	my $body = Preq::Model::Field::Markdown->new;
 	$body->set("Each requirement shall be stored as one text file.\n");
 
 =head1 DESCRIPTION
@@ -58,7 +58,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field>
+L<Preq::Model::Field>
 
 =head1 AUTHOR
 

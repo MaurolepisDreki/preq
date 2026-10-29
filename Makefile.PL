@@ -2,13 +2,13 @@ use v5.36;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-	NAME             => 'Specman',
+	NAME             => 'Preq',
 	AUTHOR           => 'Maurolepis Dreki <inventerna@gmail.com>',
-	VERSION_FROM     => 'lib/Specman.pm',
-	ABSTRACT_FROM    => 'lib/Specman.pm',
+	VERSION_FROM     => 'lib/Preq.pm',
+	ABSTRACT_FROM    => 'lib/Preq.pm',
 	LICENSE          => 'unknown',
 	MIN_PERL_VERSION => '5.036',
-	EXE_FILES        => ['bin/specman'],
+	EXE_FILES        => ['bin/preq'],
 	CONFIGURE_REQUIRES => {
 		'ExtUtils::MakeMaker' => '7.12',
 	},

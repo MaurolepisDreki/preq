@@ -1,14 +1,14 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Field::List;
+use Preq::Model::Field::List;
 
-my $class = 'Specman::Model::Field::List';
+my $class = 'Preq::Model::Field::List';
 
 like(dies { $class->new }, qr/^of must name a field class/, 'of is required');
-like(dies { $class->new(of => 'Specman::Model::Node') }, qr/is not a Specman::Model::Field/, 'of must be a field class');
+like(dies { $class->new(of => 'Preq::Model::Node') }, qr/is not a Preq::Model::Field/, 'of must be a field class');
 
 subtest 'values' => sub {
-	my $tags = $class->new(of => 'Specman::Model::Field::Text');
+	my $tags = $class->new(of => 'Preq::Model::Field::Text');
 	is($tags->get, [], 'a new list is empty');
 	ok($tags->is_valid, 'an empty list is valid');
 
@@ -28,7 +28,7 @@ subtest 'values' => sub {
 	$tags->set([qw(storage model)]);
 
 	my $element = $tags->add('gui');
-	isa_ok($element, 'Specman::Model::Field::Text');
+	isa_ok($element, 'Preq::Model::Field::Text');
 	is($tags->get, [qw(storage model gui)], 'add appends');
 
 	is($tags->remove(0)->get, 'storage', 'remove returns the element');
@@ -37,14 +37,14 @@ subtest 'values' => sub {
 };
 
 subtest 'validation' => sub {
-	my $tags = $class->new(of => 'Specman::Model::Field::Text');
+	my $tags = $class->new(of => 'Preq::Model::Field::Text');
 	$tags->set(['storage', '', 'storage', 'storage']);
 	$tags->is_valid;
 	is([$tags->errors], ['item 2: is empty', "'storage' is listed more than once"], 'element errors and duplicates');
 };
 
 subtest 'relations' => sub {
-	my $refines = $class->new(of => 'Specman::Model::Field::Relation', args => { type => 'refines' });
+	my $refines = $class->new(of => 'Preq::Model::Field::Relation', args => { type => 'refines' });
 	my $link = $refines->add('REQ-001');
 	is($link->type, 'refines', 'args are passed to the elements');
 	ok($refines->is_valid, 'valid');
@@ -55,7 +55,7 @@ subtest 'relations' => sub {
 };
 
 subtest 'released elements' => sub {
-	my $tags = $class->new(of => 'Specman::Model::Field::Text');
+	my $tags = $class->new(of => 'Preq::Model::Field::Text');
 	$tags->set(['storage']);
 	my ($old) = $tags->elements;
 	$tags->set(['model']);

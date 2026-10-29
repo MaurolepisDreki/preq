@@ -1,19 +1,19 @@
-package Specman::Model::Field::Relation 0.001;
+package Preq::Model::Field::Relation 0.001;
 
 use v5.36;
 
 use Carp qw(croak);
-use parent 'Specman::Model::Field::Id';
+use parent 'Preq::Model::Field::Id';
 
 =head1 NAME
 
-Specman::Model::Field::Relation - A single typed link to another requirement
+Preq::Model::Field::Relation - A single typed link to another requirement
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Relation;
+	use Preq::Model::Field::Relation;
 
-	my $link = Specman::Model::Field::Relation->new(type => 'refines');
+	my $link = Preq::Model::Field::Relation->new(type => 'refines');
 	$link->set('REQ-001');
 
 	$link->type;            # 'refines'
@@ -23,9 +23,9 @@ Specman::Model::Field::Relation - A single typed link to another requirement
 
 A field holding one link from a requirement to another: the relation's type
 and the identifier of its target. A requirement with several links of the same
-type holds them in a L<Specman::Model::Field::List> of relations.
+type holds them in a L<Preq::Model::Field::List> of relations.
 
-It is a L<Specman::Model::Field::Id>; its value is the target's identifier,
+It is a L<Preq::Model::Field::Id>; its value is the target's identifier,
 and the same rules for identifiers apply. A relation without a target is
 invalid.
 
@@ -64,7 +64,7 @@ my %TYPES = (
 
 =head2 new
 
-	my $link = Specman::Model::Field::Relation->new( type => $type );
+	my $link = Preq::Model::Field::Relation->new( type => $type );
 
 Creates and returns a new relation of the given type, without a target. Dies
 if C<type> is not one of the L</Relation types>.
@@ -82,7 +82,7 @@ sub new($class, %args) {
 
 =head2 types
 
-	my @types = Specman::Model::Field::Relation->types;
+	my @types = Preq::Model::Field::Relation->types;
 
 Returns the names of all relation types.
 
@@ -137,7 +137,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field::Id>, L<Specman::Model::Field::List>
+L<Preq::Model::Field::Id>, L<Preq::Model::Field::List>
 
 =head1 AUTHOR
 

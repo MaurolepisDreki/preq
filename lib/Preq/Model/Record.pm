@@ -1,31 +1,31 @@
-package Specman::Model::Record 0.001;
+package Preq::Model::Record 0.001;
 
 use v5.36;
 
 use Carp qw(croak);
-use parent 'Specman::Model::Node';
+use parent 'Preq::Model::Node';
 
-use Specman::Model::Error;
+use Preq::Model::Error;
 
 =head1 NAME
 
-Specman::Model::Record - Abstract base class for Specman records
+Preq::Model::Record - Abstract base class for preq records
 
 =head1 SYNOPSIS
 
-	package Specman::Model::Record::Example;
-	use parent 'Specman::Model::Record';
+	package Preq::Model::Record::Example;
+	use parent 'Preq::Model::Record';
 
 	sub _fields($class) {
 		return (
-			id    => { class => 'Specman::Model::Field::Id', required => 1 },
-			title => { class => 'Specman::Model::Field::Text' },
+			id    => { class => 'Preq::Model::Field::Id', required => 1 },
+			title => { class => 'Preq::Model::Field::Text' },
 		);
 	}
 
 	package main;
 
-	my $record = Specman::Model::Record::Example->new;
+	my $record = Preq::Model::Record::Example->new;
 	$record->set_values({ id => 'REQ-001', title => 'Example' });
 	$record->field('title')->set('Another example');
 
@@ -39,7 +39,7 @@ Abstract base class for a record: a named, ordered set of fields, such as a
 requirement.
 
 Validation and change notification are inherited from
-L<Specman::Model::Node>. A record's errors are those of its fields, prefixed
+L<Preq::Model::Node>. A record's errors are those of its fields, prefixed
 with the field's name, plus:
 
 =over
@@ -74,7 +74,7 @@ the errors of C<< $self->SUPER::_validate >> in the result.
 
 =head2 new
 
-	my $record = Specman::Model::Record::Example->new( %args );
+	my $record = Preq::Model::Record::Example->new( %args );
 
 Creates and returns a new record with all its fields empty. C<%args> is
 accepted for subclasses but ignored by the base class.
@@ -180,7 +180,7 @@ sub _validate($self) {
 	for my $name ($self->{order}->@*) {
 		my $field = $self->{fields}{$name};
 		if ($field->is_empty) {
-			push @errors, Specman::Model::Error->new(field => $name, message => 'is required')
+			push @errors, Preq::Model::Error->new(field => $name, message => 'is required')
 				if $self->{required}{$name};
 			next;
 		}
@@ -189,7 +189,7 @@ sub _validate($self) {
 	}
 
 	push @errors, map {
-		Specman::Model::Error->new(field => $_, message => 'is not a known field')
+		Preq::Model::Error->new(field => $_, message => 'is not a known field')
 	} $self->{unknown}->@*;
 	return @errors;
 }
@@ -198,8 +198,8 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Node>, L<Specman::Model::Field>,
-L<Specman::Model::Record::Requirement>
+L<Preq::Model::Node>, L<Preq::Model::Field>,
+L<Preq::Model::Record::Requirement>
 
 =head1 AUTHOR
 

@@ -1,4 +1,4 @@
-package Specman::Repository 0.001;
+package Preq::Repository 0.001;
 
 use v5.36;
 
@@ -6,22 +6,22 @@ use Carp qw(croak);
 use Encode qw(decode encode);
 use Scalar::Util qw(refaddr);
 use YAML::PP;
-use parent 'Specman::Model::Node';
+use parent 'Preq::Model::Node';
 
-use Specman::Model::Error;
+use Preq::Model::Error;
 
-use Specman::Model::Field::Relation;
-use Specman::Model::Record::Requirement;
+use Preq::Model::Field::Relation;
+use Preq::Model::Record::Requirement;
 
 =head1 NAME
 
-Specman::Repository - A project's requirements, as files in a directory
+Preq::Repository - A project's requirements, as files in a directory
 
 =head1 SYNOPSIS
 
-	use Specman::Repository;
+	use Preq::Repository;
 
-	my $repo = Specman::Repository->new(dir => 'requirements')->load;
+	my $repo = Preq::Repository->new(dir => 'requirements')->load;
 
 	unless ($repo->is_valid) {
 		say for $repo->errors;
@@ -34,11 +34,11 @@ Specman::Repository - A project's requirements, as files in a directory
 =head1 DESCRIPTION
 
 Reads and writes requirement files in the format described in
-L<Specman::Manual::Format>, and checks the requirements against each other.
+L<Preq::Manual::Format>, and checks the requirements against each other.
 
-A repository is a L<Specman::Model::Node>: its errors are those of every file
+A repository is a L<Preq::Model::Node>: its errors are those of every file
 and requirement it holds, and a change to any requirement is a change to the
-repository. Errors are L<Specman::Model::Error> objects; errors about a
+repository. Errors are L<Preq::Model::Error> objects; errors about a
 requirement give its file and identifier as part of their location, so they
 read as C<REQ-002.md: status: is required>, or as
 C<REQ-009: status: is required> for a requirement not yet saved.
@@ -76,7 +76,7 @@ C<refines: cycle REQ-001 -E<gt> REQ-002 -E<gt> REQ-001>.
 
 =head2 new
 
-	my $repo = Specman::Repository->new( dir => $path );
+	my $repo = Preq::Repository->new( dir => $path );
 
 Creates and returns a new, empty repository for the given directory. Nothing
 is read until L</load> is called.
@@ -135,7 +135,7 @@ sub load($self) {
 				next;
 			}
 
-			my $record = Specman::Model::Record::Requirement->new;
+			my $record = Preq::Model::Record::Requirement->new;
 			$record->set_values($values);
 			push $self->{records}->@*, $self->_adopt($record);
 			$self->{file}{refaddr $record} = $name;
@@ -149,7 +149,7 @@ sub load($self) {
 
 	my @reqs = $repo->records;
 
-Returns all requirements, as L<Specman::Model::Record::Requirement> records,
+Returns all requirements, as L<Preq::Model::Record::Requirement> records,
 in the order of their file names, followed by unsaved ones in the order they
 were added.
 
@@ -231,8 +231,8 @@ Adds a new requirement to the repository, without saving it, and returns it.
 =cut
 
 sub add($self, $record) {
-	croak 'not a Specman::Model::Record::Requirement'
-		unless ref $record && $record->isa('Specman::Model::Record::Requirement');
+	croak 'not a Preq::Model::Record::Requirement'
+		unless ref $record && $record->isa('Preq::Model::Record::Requirement');
 
 	push $self->{records}->@*, $self->_adopt($record);
 	$self->_changed;
@@ -247,7 +247,7 @@ Writes a requirement of this repository to the file named after its
 identifier, and returns the file name. If the requirement was read from a
 file with a different name, that file is removed.
 
-The header is written in the order of L<Specman::Manual::Format>, leaving out
+The header is written in the order of L<Preq::Manual::Format>, leaving out
 empty optional fields; values are quoted only where YAML requires it.
 
 Requirements with errors can be saved, so that unfinished work is not lost,
@@ -333,7 +333,7 @@ sub _format($self, $record) {
 		my $field = $record->field($name);
 		next if $field->is_empty;
 
-		if ($field->isa('Specman::Model::Field::List')) {
+		if ($field->isa('Preq::Model::Field::List')) {
 			croak "cannot save: $name: is not a list" unless $field->elements;
 			my @items = map { $self->_scalar($name, $_, 1) } $field->get->@*;
 			push @lines, "$name: [" . join(', ', @items) . ']';
@@ -394,7 +394,7 @@ sub _check_files($self) {
 	my $errors = $self->{file_errors};
 	return map {
 		my $file = $_;
-		map { Specman::Model::Error->new(file => $file, message => $_) } $errors->{$file}->@*
+		map { Preq::Model::Error->new(file => $file, message => $_) } $errors->{$file}->@*
 	} sort keys %$errors;
 }
 
@@ -411,7 +411,7 @@ sub _check_file_names($self) {
 		my $file = $self->{file}{refaddr $_};
 		my $id = $_->id;
 		defined $file && defined $id && $file ne "$id.md"
-			? Specman::Model::Error->new(file => $file, id => $id, message => "file name does not match id '$id'")
+			? Preq::Model::Error->new(file => $file, id => $id, message => "file name does not match id '$id'")
 			: ();
 	} $self->{records}->@*;
 }
@@ -425,7 +425,7 @@ sub _check_unique_ids($self) {
 	return map {
 		my @names = $names{$_}->@*;
 		@names > 1
-			? Specman::Model::Error->new(id => $_, message => "is used by more than one requirement (" . join(', ', @names) . ')')
+			? Preq::Model::Error->new(id => $_, message => "is used by more than one requirement (" . join(', ', @names) . ')')
 			: ();
 	} sort keys %names;
 }
@@ -434,11 +434,11 @@ sub _check_targets($self) {
 	my %exists = map { $_ => 1 } $self->_ids;
 	my @errors;
 	for my $record ($self->{records}->@*) {
-		for my $type (Specman::Model::Field::Relation->types) {
+		for my $type (Preq::Model::Field::Relation->types) {
 			my @links = $record->field($type)->elements;
 			for my $i (0 .. $#links) {
 				my $target = $links[$i]->get;
-				push @errors, Specman::Model::Error->new(
+				push @errors, Preq::Model::Error->new(
 					$self->_location($record),
 					field   => $type,
 					item    => $i + 1,
@@ -453,8 +453,8 @@ sub _check_targets($self) {
 sub _check_cycles($self) {
 	my %exists = map { $_ => 1 } $self->_ids;
 	my @errors;
-	for my $type (Specman::Model::Field::Relation->types) {
-		next unless Specman::Model::Field::Relation->new(type => $type)->is_acyclic;
+	for my $type (Preq::Model::Field::Relation->types) {
+		next unless Preq::Model::Field::Relation->new(type => $type)->is_acyclic;
 
 		my %graph;
 		for my $record ($self->{records}->@*) {
@@ -464,7 +464,7 @@ sub _check_cycles($self) {
 			} map { $_->get } $record->field($type)->elements;
 		}
 		push @errors, map {
-			Specman::Model::Error->new(field => $type, message => 'cycle ' . join(' -> ', @$_, $_->[0]))
+			Preq::Model::Error->new(field => $type, message => 'cycle ' . join(' -> ', @$_, $_->[0]))
 		} _cycles(\%graph);
 	}
 	return @errors;
@@ -513,7 +513,7 @@ sub _cycles($graph) {
 
 =head1 SEE ALSO
 
-L<Specman::Manual::Format>, L<Specman::Model::Record::Requirement>
+L<Preq::Manual::Format>, L<Preq::Model::Record::Requirement>
 
 =head1 AUTHOR
 

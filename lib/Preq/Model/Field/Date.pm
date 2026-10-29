@@ -1,18 +1,18 @@
-package Specman::Model::Field::Date 0.001;
+package Preq::Model::Field::Date 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Field::Text';
+use parent 'Preq::Model::Field::Text';
 
 =head1 NAME
 
-Specman::Model::Field::Date - Calendar date field
+Preq::Model::Field::Date - Calendar date field
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Date;
+	use Preq::Model::Field::Date;
 
-	my $created = Specman::Model::Field::Date->new;
+	my $created = Preq::Model::Field::Date->new;
 	$created->set('2026-10-27');
 
 =head1 DESCRIPTION
@@ -21,7 +21,7 @@ A field holding a calendar date in the form C<YYYY-MM-DD>, such as a
 requirement's C<created> date. The date must exist: C<2026-02-29> is
 invalid, C<2024-02-29> is not.
 
-It is a L<Specman::Model::Field::Text>, so the same rules for text apply
+It is a L<Preq::Model::Field::Text>, so the same rules for text apply
 first.
 
 =cut
@@ -49,7 +49,7 @@ sub _days_in_month($y, $m) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field::Text>
+L<Preq::Model::Field::Text>
 
 =head1 AUTHOR
 

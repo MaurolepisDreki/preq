@@ -1,12 +1,12 @@
-<!-- Generated from lib/Specman/Manual/Format.pod by tools/pod2doc: edit the source and run `make docs`. -->
+<!-- Generated from lib/Preq/Manual/Format.pod by tools/pod2doc: edit the source and run `make docs`. -->
 
 # NAME
 
-Specman::Manual::Format - The Specman requirement file format
+Preq::Manual::Format - The preq requirement file format
 
 # DESCRIPTION
 
-Specman stores each requirement as one text file. The files live in a
+preq stores each requirement as one text file. The files live in a
 directory named `requirements/` at the root of the project they describe,
 and are kept under version control with git.
 
@@ -100,7 +100,7 @@ invalid.
 
 Relations are lists of requirement identifiers. Each relation is recorded only
 in the requirement it starts from; the reverse direction (for example, which
-requirements refine `REQ-001`) is derived by Specman. Every identifier listed
+requirements refine `REQ-001`) is derived by preq. Every identifier listed
 must name an existing requirement.
 
 - `refines` (optional)
@@ -119,7 +119,7 @@ must name an existing requirement.
 
 ## Writing order
 
-When Specman writes a header, it writes the keys in the order listed above
+When preq writes a header, it writes the keys in the order listed above
 (`id`, `title`, `status`, `priority`, `author`, `created`, `tags`,
 `refines`, `depends_on`, `conflicts_with`), leaves out optional keys that
 have no value, and quotes values only where YAML requires it, so that changes
@@ -134,7 +134,7 @@ repeated as a heading in the body.
 
 # SEE ALSO
 
-[Specman](../lib/Specman.pm), [Specman::Model::Field](../lib/Specman/Model/Field.pm)
+[Preq](../lib/Preq.pm), [Preq::Model::Field](../lib/Preq/Model/Field.pm)
 
 # AUTHOR
 

@@ -1,8 +1,8 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Field::Markdown;
+use Preq::Model::Field::Markdown;
 
-my $field = Specman::Model::Field::Markdown->new;
+my $field = Preq::Model::Field::Markdown->new;
 ok($field->is_valid, 'no value is valid');
 
 $field->set("# Heading\n\nTwo\nlines.\n");

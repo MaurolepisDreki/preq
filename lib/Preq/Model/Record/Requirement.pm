@@ -1,21 +1,21 @@
-package Specman::Model::Record::Requirement 0.001;
+package Preq::Model::Record::Requirement 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Record';
+use parent 'Preq::Model::Record';
 
-use Specman::Model::Error;
-use Specman::Model::Field::Relation;
+use Preq::Model::Error;
+use Preq::Model::Field::Relation;
 
 =head1 NAME
 
-Specman::Model::Record::Requirement - A requirement
+Preq::Model::Record::Requirement - A requirement
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Record::Requirement;
+	use Preq::Model::Record::Requirement;
 
-	my $req = Specman::Model::Record::Requirement->new;
+	my $req = Preq::Model::Record::Requirement->new;
 	$req->set_values({
 		id      => 'REQ-002',
 		title   => 'Store requirements as text files',
@@ -31,7 +31,7 @@ Specman::Model::Record::Requirement - A requirement
 =head1 DESCRIPTION
 
 A requirement record, with the fixed set of fields described in
-L<Specman::Manual::Format>. In order:
+L<Preq::Manual::Format>. In order:
 
 	id              Field::Id        required
 	title           Field::Text      required
@@ -66,7 +66,7 @@ checked by the collection holding the requirements.
 =cut
 
 sub _fields($class) {
-	my $base = 'Specman::Model::Field';
+	my $base = 'Preq::Model::Field';
 	return (
 		id       => { class => "${base}::Id", required => 1 },
 		title    => { class => "${base}::Text", required => 1 },
@@ -107,7 +107,7 @@ sub id($self) {
 
 	my @links = $req->relations;
 
-Returns all the requirement's relations, as L<Specman::Model::Field::Relation>
+Returns all the requirement's relations, as L<Preq::Model::Field::Relation>
 fields, grouped by type in the order of L</DESCRIPTION>.
 
 =cut
@@ -125,7 +125,7 @@ sub _validate($self) {
 			my @links = $self->field($type)->elements;
 			for my $i (0 .. $#links) {
 				my $target = $links[$i]->get;
-				push @errors, Specman::Model::Error->new(
+				push @errors, Preq::Model::Error->new(
 					field   => $type,
 					item    => $i + 1,
 					message => "'$id' refers to itself",
@@ -137,7 +137,7 @@ sub _validate($self) {
 	my $status_field = $self->field('status');
 	my $status = $status_field->get;
 	my $body = $self->field('body')->get;
-	push @errors, Specman::Model::Error->new(field => 'body', message => 'is required unless status is draft')
+	push @errors, Preq::Model::Error->new(field => 'body', message => 'is required unless status is draft')
 		if defined $status && $status ne 'draft' && $status_field->is_valid
 			&& (!defined $body || (!ref $body && $body !~ /\S/));
 
@@ -148,7 +148,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Record>, L<Specman::Manual::Format>
+L<Preq::Model::Record>, L<Preq::Manual::Format>
 
 =head1 AUTHOR
 

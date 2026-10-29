@@ -1,23 +1,23 @@
-package Specman::Model::Field 0.001;
+package Preq::Model::Field 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Node';
+use parent 'Preq::Model::Node';
 
 =head1 NAME
 
-Specman::Model::Field - Field model for Specman
+Preq::Model::Field - Field model for preq
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field;
+	use Preq::Model::Field;
 
 =head1 DESCRIPTION
 
-Abstract base class for a field within a Specman model.
+Abstract base class for a field within a preq model.
 
 Validation and change notification are inherited from
-L<Specman::Model::Node>.
+L<Preq::Model::Node>.
 
 Subclasses must implement C<get>, C<set> and C<_validate>; the default
 implementations die with C<NotImplemented>. C<set> must call C<_changed>
@@ -34,7 +34,7 @@ field must have a value is decided by the record containing it.
 
 =head2 new
 
-	my $field = Specman::Model::Field->new( %args );
+	my $field = Preq::Model::Field->new( %args );
 
 Creates and returns a new, empty field. C<%args> is accepted for subclasses
 but ignored by the base class.
@@ -96,7 +96,7 @@ sub _store($self, $value) {
 
 =head1 SEE ALSO
 
-L<Specman>, L<Specman::Model::Node>
+L<Preq>, L<Preq::Model::Node>
 
 =head1 AUTHOR
 

@@ -2,7 +2,7 @@ use v5.36;
 use Test2::V0;
 use File::Copy qw(copy);
 use File::Temp qw(tempdir);
-use Specman::Repository;
+use Preq::Repository;
 
 sub write_file($path, $content) {
 	open my $fh, '>:raw', $path or die "$path: $!";
@@ -20,7 +20,7 @@ sub read_file($path) {
 sub repo_with(%files) {
 	my $dir = tempdir(CLEANUP => 1);
 	write_file("$dir/$_", $files{$_}) for keys %files;
-	return Specman::Repository->new(dir => $dir)->load;
+	return Preq::Repository->new(dir => $dir)->load;
 }
 
 sub req($id, %values) {
@@ -33,17 +33,17 @@ sub errors_of($repo) {
 	return [map { "$_" } $repo->errors];
 }
 
-like(dies { Specman::Repository->new }, qr/^dir is required/, 'dir is required');
-like(dies { Specman::Repository->new(dir => '/nonexistent')->load }, qr/^cannot read/, 'load dies without a directory');
+like(dies { Preq::Repository->new }, qr/^dir is required/, 'dir is required');
+like(dies { Preq::Repository->new(dir => '/nonexistent')->load }, qr/^cannot read/, 'load dies without a directory');
 
 subtest 'project requirements' => sub {
-	my $repo = Specman::Repository->new(dir => 'requirements')->load;
+	my $repo = Preq::Repository->new(dir => 'requirements')->load;
 	ok(scalar(my @r = $repo->records) > 0, 'requirements found');
 	is(errors_of($repo), [], 'the project requirements are valid');
 
 	my $dir = tempdir(CLEANUP => 1);
 	copy("requirements/$_", "$dir/$_") for map { "$_.md" } map { $_->id } $repo->records;
-	my $copy = Specman::Repository->new(dir => $dir)->load;
+	my $copy = Preq::Repository->new(dir => $dir)->load;
 	for my $record ($copy->records) {
 		my $name = $record->id . '.md';
 		$copy->save($record);
@@ -63,7 +63,7 @@ subtest 'lookup' => sub {
 	is([map { $_->id } $repo->incoming('REQ-001')], [qw(REQ-002 REQ-010)], 'incoming');
 	is([map { $_->id } $repo->incoming('REQ-001', 'refines')], ['REQ-002'], 'incoming by type');
 	is($repo->next_id, 'REQ-011', 'next_id');
-	is(Specman::Repository->new(dir => '.')->next_id, 'REQ-001', 'next_id when empty');
+	is(Preq::Repository->new(dir => '.')->next_id, 'REQ-001', 'next_id when empty');
 };
 
 subtest 'file errors' => sub {
@@ -114,7 +114,7 @@ subtest 'changes' => sub {
 	$repo->record('REQ-002')->field('refines')->set(['REQ-002']);
 	is($seen[-1], ["REQ-002.md: refines: item 1: 'REQ-002' refers to itself"], 'a change to a requirement reaches the repository');
 
-	my $new = Specman::Model::Record::Requirement->new;
+	my $new = Preq::Model::Record::Requirement->new;
 	$new->set_values({ id => 'REQ-003', title => 'New', status => 'draft', created => '2026-10-27', refines => ['REQ-404'] });
 	$repo->add($new);
 	is($seen[-1][-1], "REQ-003: refines: item 1: 'REQ-404' does not exist", 'unsaved requirements are located by id');
@@ -124,7 +124,7 @@ subtest 'save' => sub {
 	my $repo = repo_with('REQ-001.md' => req('REQ-001'), 'REQ-002.md' => req('REQ-002'));
 	my $dir = $repo->dir;
 
-	my $new = Specman::Model::Record::Requirement->new;
+	my $new = Preq::Model::Record::Requirement->new;
 	$new->set_values({
 		id      => $repo->next_id,
 		title   => 'Search: by tag, then by text',
@@ -148,7 +148,7 @@ subtest 'save' => sub {
 		"Line one.\n",
 	), 'written in order, quoted only where needed, as UTF-8');
 
-	my $reloaded = Specman::Repository->new(dir => $dir)->load->record('REQ-003');
+	my $reloaded = Preq::Repository->new(dir => $dir)->load->record('REQ-003');
 	is($reloaded->get_values, $new->get_values, 'reads back the same values');
 
 	$new->field('id')->set('REQ-004');
@@ -169,7 +169,7 @@ subtest 'save' => sub {
 	$new->field('title')->set({});
 	like(dies { $repo->save($new) }, qr/^cannot save: title: is not text/, 'a non-text value cannot be saved');
 
-	like(dies { $repo->save(Specman::Model::Record::Requirement->new) }, qr/^not a requirement in this repository/, 'only its own requirements');
+	like(dies { $repo->save(Preq::Model::Record::Requirement->new) }, qr/^not a requirement in this repository/, 'only its own requirements');
 };
 
 done_testing;

@@ -1,25 +1,25 @@
 use v5.36;
 use Test2::V0;
-use Specman::Model::Record;
+use Preq::Model::Record;
 
 package Test::Record {
-	use parent -norequire, 'Specman::Model::Record';
+	use parent -norequire, 'Preq::Model::Record';
 
 	sub _fields($class) {
 		return (
-			id    => { class => 'Specman::Model::Field::Id', required => 1 },
-			title => { class => 'Specman::Model::Field::Text' },
-			tags  => { class => 'Specman::Model::Field::List', args => { of => 'Specman::Model::Field::Text' }, required => 1 },
+			id    => { class => 'Preq::Model::Field::Id', required => 1 },
+			title => { class => 'Preq::Model::Field::Text' },
+			tags  => { class => 'Preq::Model::Field::List', args => { of => 'Preq::Model::Field::Text' }, required => 1 },
 		);
 	}
 }
 
-like(dies { Specman::Model::Record->new }, qr/^NotImplemented/, 'abstract record dies with NotImplemented');
+like(dies { Preq::Model::Record->new }, qr/^NotImplemented/, 'abstract record dies with NotImplemented');
 
 subtest 'fields' => sub {
 	my $record = Test::Record->new;
 	is([$record->field_names], [qw(id title tags)], 'field_names in order');
-	isa_ok($record->field('id'), 'Specman::Model::Field::Id');
+	isa_ok($record->field('id'), 'Preq::Model::Field::Id');
 	like(dies { $record->field('colour') }, qr/^no field named 'colour'/, 'unknown field dies');
 	ok($record->is_required('id'), 'id is required');
 	ok(!$record->is_required('title'), 'title is optional');

@@ -9,11 +9,11 @@ use v5.36;
 #
 # Run from the top of the source tree, usually as `make docs`.
 
-package Specman::Tools::Markdown {
+package Preq::Tools::Markdown {
 	use parent 'Pod::Markdown';
 
 	# Links to other documents generated here point to their Markdown file,
-	# links to Specman's own modules to their source, and other links to
+	# links to Preq's own modules to their source, and other links to
 	# MetaCPAN as usual.
 	sub format_perldoc_url($self, $name, $section) {
 		return $self->SUPER::format_perldoc_url($name, $section)
@@ -23,7 +23,7 @@ package Specman::Tools::Markdown {
 		for my $source (keys %target) {
 			return main::relative($target{$source}) if main::pod_name($source) eq $name;
 		}
-		if ($name =~ /\ASpecman(?:::|\z)/) {
+		if ($name =~ /\APreq(?:::|\z)/) {
 			(my $path = "lib/$name.pm") =~ s{::}{/}g;
 			return main::relative($path);
 		}
@@ -36,8 +36,8 @@ package main;
 use Pod::Markdown;
 
 our %DOCS = (
-	'doc/commands.md' => 'bin/specman',
-	'doc/format.md'   => 'lib/Specman/Manual/Format.pod',
+	'doc/commands.md' => 'bin/preq',
+	'doc/format.md'   => 'lib/Preq/Manual/Format.pod',
 );
 
 # The name a POD document is linked by: the command or module name.
@@ -55,7 +55,7 @@ sub relative($path) {
 
 sub generate($target) {
 	my $source = $DOCS{$target};
-	my $parser = Specman::Tools::Markdown->new(output_encoding => 'UTF-8');
+	my $parser = Preq::Tools::Markdown->new(output_encoding => 'UTF-8');
 	$parser->output_string(\my $markdown);
 
 	# Verbatim blocks are copied as they are. Keep their tab indentation,

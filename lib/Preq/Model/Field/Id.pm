@@ -1,18 +1,18 @@
-package Specman::Model::Field::Id 0.001;
+package Preq::Model::Field::Id 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Field::Text';
+use parent 'Preq::Model::Field::Text';
 
 =head1 NAME
 
-Specman::Model::Field::Id - Requirement identifier field
+Preq::Model::Field::Id - Requirement identifier field
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Id;
+	use Preq::Model::Field::Id;
 
-	my $id = Specman::Model::Field::Id->new;
+	my $id = Preq::Model::Field::Id->new;
 	$id->set('REQ-001');
 
 =head1 DESCRIPTION
@@ -20,7 +20,7 @@ Specman::Model::Field::Id - Requirement identifier field
 A field holding a requirement identifier: C<REQ-> followed by three or more
 digits, for example C<REQ-001>.
 
-It is a L<Specman::Model::Field::Text>, so the same rules for text apply
+It is a L<Preq::Model::Field::Text>, so the same rules for text apply
 first.
 
 =cut
@@ -38,7 +38,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field::Text>, L<Specman::Manual::Format>
+L<Preq::Model::Field::Text>, L<Preq::Manual::Format>
 
 =head1 AUTHOR
 

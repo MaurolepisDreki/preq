@@ -1,20 +1,20 @@
-package Specman::Model::Node 0.001;
+package Preq::Model::Node 0.001;
 
 use v5.36;
 
 use Scalar::Util qw(weaken);
 use Time::HiRes ();
 
-use Specman::Model::Error;
+use Preq::Model::Error;
 
 =head1 NAME
 
-Specman::Model::Node - Validation and change notification for Specman models
+Preq::Model::Node - Validation and change notification for preq models
 
 =head1 SYNOPSIS
 
-	package Specman::Model::Example;
-	use parent 'Specman::Model::Node';
+	package Preq::Model::Example;
+	use parent 'Preq::Model::Node';
 
 	sub _validate($self) {
 		return defined $self->{value} ? () : ('value: missing');
@@ -22,7 +22,7 @@ Specman::Model::Node - Validation and change notification for Specman models
 
 	package main;
 
-	my $node = Specman::Model::Example->new;
+	my $node = Preq::Model::Example->new;
 
 	my $id = $node->on_errors_updated(sub ($node, @errors) { ... });
 
@@ -32,7 +32,7 @@ Specman::Model::Node - Validation and change notification for Specman models
 
 =head1 DESCRIPTION
 
-Abstract base class for everything in a Specman model that can be validated,
+Abstract base class for everything in a preq model that can be validated,
 such as fields and records.
 
 A node validates itself when L</is_valid> is called and caches the resulting
@@ -61,12 +61,12 @@ revalidates only when L</is_valid> is next called.
 
 Subclasses must implement C<_validate>, which returns the list of problems
 found in the node, or an empty list if there are none. Each problem is a
-L<Specman::Model::Error>, or a plain string, which is turned into an error
+L<Preq::Model::Error>, or a plain string, which is turned into an error
 with that message and no location.
 
 A parent's C<_validate> should include the errors of its children, by calling
 their C<is_valid> and C<errors>, adding where each child is with
-L<Specman::Model::Error/within>.
+L<Preq::Model::Error/within>.
 
 Every method that changes a node must call C<_changed> afterwards.
 
@@ -89,7 +89,7 @@ subroutine returns or dies.
 
 =head2 new
 
-	my $node = Specman::Model::Node->new( %args );
+	my $node = Preq::Model::Node->new( %args );
 
 Creates and returns a new node that has not yet been validated. C<%args> is
 accepted for subclasses but ignored by the base class.
@@ -126,7 +126,7 @@ Dies with C<NotImplemented> if the subclass does not implement C<_validate>.
 sub is_valid($self) {
 	if ($self->{_dirty}) {
 		my @errors = map {
-			ref $_ ? $_ : Specman::Model::Error->new(message => $_)
+			ref $_ ? $_ : Preq::Model::Error->new(message => $_)
 		} $self->_validate;
 		$self->{_dirty} = 0;
 
@@ -147,7 +147,7 @@ sub is_valid($self) {
 	my @errors = $node->errors;
 
 Returns the list of errors and warnings found by the most recent call to
-L</is_valid>, as L<Specman::Model::Error> objects. Returns an empty list if
+L</is_valid>, as L<Preq::Model::Error> objects. Returns an empty list if
 L</is_valid> has not been called yet. Never
 validates the node itself.
 
@@ -253,7 +253,7 @@ sub _next_stamp($previous) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field>
+L<Preq::Model::Field>
 
 =head1 AUTHOR
 

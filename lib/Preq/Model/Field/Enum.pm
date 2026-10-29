@@ -1,19 +1,19 @@
-package Specman::Model::Field::Enum 0.001;
+package Preq::Model::Field::Enum 0.001;
 
 use v5.36;
 
 use Carp qw(croak);
-use parent 'Specman::Model::Field::Text';
+use parent 'Preq::Model::Field::Text';
 
 =head1 NAME
 
-Specman::Model::Field::Enum - Field limited to a fixed set of words
+Preq::Model::Field::Enum - Field limited to a fixed set of words
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Enum;
+	use Preq::Model::Field::Enum;
 
-	my $status = Specman::Model::Field::Enum->new(
+	my $status = Preq::Model::Field::Enum->new(
 		allowed => [qw(draft approved implemented obsolete)],
 	);
 	$status->set('draft');
@@ -23,14 +23,14 @@ Specman::Model::Field::Enum - Field limited to a fixed set of words
 A field whose value must be one of a fixed list of words, such as a
 requirement's C<status> or C<priority>.
 
-It is a L<Specman::Model::Field::Text>, so the same rules for text apply
+It is a L<Preq::Model::Field::Text>, so the same rules for text apply
 first.
 
 =head1 METHODS
 
 =head2 new
 
-	my $field = Specman::Model::Field::Enum->new( allowed => \@words );
+	my $field = Preq::Model::Field::Enum->new( allowed => \@words );
 
 Creates and returns a new, empty field. C<allowed> is required and lists the
 permitted values, in the order they are presented to users.
@@ -72,7 +72,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field::Text>
+L<Preq::Model::Field::Text>
 
 =head1 AUTHOR
 

@@ -3,8 +3,8 @@ use Test2::V0;
 use Encode qw(decode);
 use File::Temp qw(tempdir);
 use JSON::PP;
-use Specman;
-use Specman::CLI;
+use Preq;
+use Preq::CLI;
 
 my $dir = tempdir(CLEANUP => 1);
 my %files = (
@@ -21,7 +21,7 @@ for my $name (keys %files) {
 sub run_cli(@args) {
 	open my $out, '>', \my $out_bytes or die;
 	open my $err, '>', \my $err_bytes or die;
-	my $status = Specman::CLI->new(out => $out, err => $err, pod => 'bin/specman')->run(@args);
+	my $status = Preq::CLI->new(out => $out, err => $err, pod => 'bin/preq')->run(@args);
 	close $out;
 	close $err;
 	return ($status, decode('UTF-8', $out_bytes // ''), decode('UTF-8', $err_bytes // ''));
@@ -76,14 +76,14 @@ subtest 'show' => sub {
 	my $err;
 	($status, $out, $err) = run_cli('--dir', $dir, 'show', 'REQ-999');
 	is($status, 1, 'unknown requirement: exit status 1');
-	is($err, "specman: no requirement 'REQ-999'\n", 'with a message');
+	is($err, "preq: no requirement 'REQ-999'\n", 'with a message');
 };
 
 subtest 'validate' => sub {
 	my ($status, $out, $err) = run_cli('--dir', $dir, 'validate');
 	is($status, 0, 'valid: exit status 0');
 	is($out, '', 'no errors printed');
-	is($err, "specman: 2 requirements, 0 errors\n", 'summary on standard error');
+	is($err, "preq: 2 requirements, 0 errors\n", 'summary on standard error');
 
 	my $bad = tempdir(CLEANUP => 1);
 	open my $fh, '>', "$bad/REQ-001.md" or die;
@@ -93,7 +93,7 @@ subtest 'validate' => sub {
 	($status, $out, $err) = run_cli('--dir', $bad, 'validate');
 	is($status, 1, 'invalid: exit status 1');
 	like($out, qr/^REQ-001\.md: status: 'done' is not one of/, 'errors printed');
-	is($err, "specman: 1 requirement, 1 error\n", 'summary uses singular forms');
+	is($err, "preq: 1 requirement, 1 error\n", 'summary uses singular forms');
 
 	($status, $out) = run_cli('--dir', $bad, 'validate', '--json');
 	my $result = decode_json($out);
@@ -109,19 +109,19 @@ subtest 'validate' => sub {
 
 	{
 		no warnings 'redefine';
-		local *Specman::Repository::_check_cycles = sub ($self) {
-			return Specman::Model::Error->new(id => 'REQ-001', message => 'looks odd', severity => 'warning');
+		local *Preq::Repository::_check_cycles = sub ($self) {
+			return Preq::Model::Error->new(id => 'REQ-001', message => 'looks odd', severity => 'warning');
 		};
 		($status, $out, $err) = run_cli('--dir', $dir, 'validate');
 	}
 	is($status, 0, 'warnings only: exit status 0');
 	is($out, "warning: REQ-001: looks odd\n", 'warnings are marked');
-	is($err, "specman: 2 requirements, 0 errors, 1 warning\n", 'and counted');
+	is($err, "preq: 2 requirements, 0 errors, 1 warning\n", 'and counted');
 };
 
 subtest 'usage' => sub {
 	my ($status, $out, $err) = run_cli('--version');
-	is([$status, $out], [0, "specman $Specman::VERSION\n"], '--version');
+	is([$status, $out], [0, "preq $Preq::VERSION\n"], '--version');
 
 	($status, $out) = run_cli('--help');
 	is($status, 0, '--help: exit status 0');
@@ -132,22 +132,22 @@ subtest 'usage' => sub {
 	like($err, qr/^Usage:/, 'usage printed');
 
 	($status, $out, $err) = run_cli('--dir', $dir, 'bogus');
-	is([$status, $err], [2, "specman: unknown command 'bogus'\n"], 'unknown command');
+	is([$status, $err], [2, "preq: unknown command 'bogus'\n"], 'unknown command');
 
 	($status, $out, $err) = run_cli('--bogus');
 	is($status, 2, 'unknown option: exit status 2');
-	like($err, qr/^specman: unknown option: bogus\n/, 'reported on the error handle');
+	like($err, qr/^preq: unknown option: bogus\n/, 'reported on the error handle');
 
 	($status, $out, $err) = run_cli('--dir', "$dir/nope", 'list');
-	is([$status, $err], [2, "specman: no requirements directory '$dir/nope'\n"], 'missing directory');
+	is([$status, $err], [2, "preq: no requirements directory '$dir/nope'\n"], 'missing directory');
 
 	($status) = run_cli('--dir', $dir, 'show');
 	is($status, 2, 'show without an id');
 };
 
 subtest 'script' => sub {
-	my $out = `$^X -Ilib bin/specman --version`;
-	is([$? >> 8, $out], [0, "specman $Specman::VERSION\n"], 'bin/specman runs');
+	my $out = `$^X -Ilib bin/preq --version`;
+	is([$? >> 8, $out], [0, "preq $Preq::VERSION\n"], 'bin/preq runs');
 };
 
 done_testing;

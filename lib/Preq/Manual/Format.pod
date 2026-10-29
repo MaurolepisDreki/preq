@@ -1,10 +1,10 @@
 =head1 NAME
 
-Specman::Manual::Format - The Specman requirement file format
+Preq::Manual::Format - The preq requirement file format
 
 =head1 DESCRIPTION
 
-Specman stores each requirement as one text file. The files live in a
+preq stores each requirement as one text file. The files live in a
 directory named F<requirements/> at the root of the project they describe,
 and are kept under version control with git.
 
@@ -115,7 +115,7 @@ A list of short, lowercase words used for grouping and searching.
 
 Relations are lists of requirement identifiers. Each relation is recorded only
 in the requirement it starts from; the reverse direction (for example, which
-requirements refine C<REQ-001>) is derived by Specman. Every identifier listed
+requirements refine C<REQ-001>) is derived by preq. Every identifier listed
 must name an existing requirement.
 
 =over
@@ -138,7 +138,7 @@ be recorded in only one of the two requirements.
 
 =head2 Writing order
 
-When Specman writes a header, it writes the keys in the order listed above
+When preq writes a header, it writes the keys in the order listed above
 (C<id>, C<title>, C<status>, C<priority>, C<author>, C<created>, C<tags>,
 C<refines>, C<depends_on>, C<conflicts_with>), leaves out optional keys that
 have no value, and quotes values only where YAML requires it, so that changes
@@ -153,7 +153,7 @@ repeated as a heading in the body.
 
 =head1 SEE ALSO
 
-L<Specman>, L<Specman::Model::Field>
+L<Preq>, L<Preq::Model::Field>
 
 =head1 AUTHOR
 

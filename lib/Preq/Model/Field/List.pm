@@ -1,25 +1,25 @@
-package Specman::Model::Field::List 0.001;
+package Preq::Model::Field::List 0.001;
 
 use v5.36;
 
 use Carp qw(croak);
-use parent 'Specman::Model::Field';
+use parent 'Preq::Model::Field';
 
 =head1 NAME
 
-Specman::Model::Field::List - Field holding a list of other fields
+Preq::Model::Field::List - Field holding a list of other fields
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::List;
+	use Preq::Model::Field::List;
 
-	my $tags = Specman::Model::Field::List->new(
-		of => 'Specman::Model::Field::Text',
+	my $tags = Preq::Model::Field::List->new(
+		of => 'Preq::Model::Field::Text',
 	);
 	$tags->set([qw(storage model)]);
 
-	my $refines = Specman::Model::Field::List->new(
-		of   => 'Specman::Model::Field::Relation',
+	my $refines = Preq::Model::Field::List->new(
+		of   => 'Preq::Model::Field::Relation',
 		args => { type => 'refines' },
 	);
 	$refines->add('REQ-001');
@@ -39,13 +39,13 @@ Changes to an element are changes to the list.
 
 =head2 new
 
-	my $list = Specman::Model::Field::List->new(
+	my $list = Preq::Model::Field::List->new(
 		of   => $class,
 		args => \%args,
 	);
 
 Creates and returns a new, empty list. C<of> is required and names the
-L<Specman::Model::Field> subclass of the elements; it is loaded if needed.
+L<Preq::Model::Field> subclass of the elements; it is loaded if needed.
 C<args> is optional and is passed to the elements' C<new>.
 
 =cut
@@ -54,7 +54,7 @@ sub new($class, %args) {
 	my $of = $args{of} or croak 'of must name a field class';
 	(my $file = "$of.pm") =~ s{::}{/}g;
 	require $file;
-	croak "$of is not a Specman::Model::Field" unless $of->isa('Specman::Model::Field');
+	croak "$of is not a Preq::Model::Field" unless $of->isa('Preq::Model::Field');
 
 	my $self = $class->SUPER::new(%args);
 	$self->{of} = $of;
@@ -180,7 +180,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field>
+L<Preq::Model::Field>
 
 =head1 AUTHOR
 

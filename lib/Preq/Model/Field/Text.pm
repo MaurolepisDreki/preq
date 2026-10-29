@@ -1,18 +1,18 @@
-package Specman::Model::Field::Text 0.001;
+package Preq::Model::Field::Text 0.001;
 
 use v5.36;
 
-use parent 'Specman::Model::Field';
+use parent 'Preq::Model::Field';
 
 =head1 NAME
 
-Specman::Model::Field::Text - Single-line text field
+Preq::Model::Field::Text - Single-line text field
 
 =head1 SYNOPSIS
 
-	use Specman::Model::Field::Text;
+	use Preq::Model::Field::Text;
 
-	my $title = Specman::Model::Field::Text->new;
+	my $title = Preq::Model::Field::Text->new;
 	$title->set('Store requirements as text files');
 
 =head1 DESCRIPTION
@@ -63,7 +63,7 @@ sub _validate($self) {
 
 =head1 SEE ALSO
 
-L<Specman::Model::Field>
+L<Preq::Model::Field>
 
 =head1 AUTHOR
 
